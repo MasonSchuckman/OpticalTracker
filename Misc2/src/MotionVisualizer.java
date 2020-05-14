@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*; 
+import javax.swing.*;
+import javax.vecmath.Vector2d;
+
 import java.awt.geom.Line2D;
 import java.util.ArrayList; 
   
@@ -16,8 +18,8 @@ class MyCanvas extends JComponent {
     	
         // draw and display the line 
     	  
-    	int [] xx= {100,150,200,150};
-    	int [] yy= {100, 150, 200,200};
+    	int [] xx= {100,150,200};
+    	int [] yy= {100, 150, 200};
 	    g.drawPolygon(x, y, points);
     } 
     public void update(ArrayList<Integer> X, ArrayList<Integer> Y) {
@@ -71,14 +73,39 @@ public class MotionVisualizer {
 		x.add(positions[0][0]);
 		y.add(positions[0][1]);
 		positionss=positions.clone();
-		if(x.size()>10) {
+		if(x.size()>5) {
 			x.remove(0);
 			y.remove(0);
 			can.update(x, y);
 	        can.repaint();
+	        detectLine();
 		}
 	}
     public static boolean detectLine() {
+    	int minSize=50;
+    	int initialX=x.get(0);
+    	int initialY=y.get(0);
+    	
+    	float average=0;
+    	Vector2d init=new Vector2d(new int[]{x.get(0)-x.get(1),y.get(0)-y.get(1)});
+    	init.normalize();
+    	for(int i=2; i<x.size(); i++) {
+    		Vector2d current=new Vector2d(new int[]{x.get(0)-x.get(i),y.get(0)-y.get(i)});
+    		current.normalize();
+    		average+=Math.abs(init.cross(current));
+    	}    	
+    	
+    	float dx=initialX-x.get(x.size()-1);
+    	float dy=initialY-y.get(y.size()-1);
+    	float dis=(float) Math.hypot(dx, dy);
+    	
+		//lower average value corresponds to a straighter push.
+    	
+    	if(average>.05&&average<3)
+    		//System.out.print("bad "+average);
+			System.out.print("");
+    	else if(dis>minSize&&average!=0)
+    		System.out.println("good push! "+average+" dis: "+dis);
     	
     	return false;
     }

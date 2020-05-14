@@ -3,8 +3,8 @@ package javax.vecmath;
 
 public class Vector2d {
 
-	private double x;
-	private double y;
+	private float x;
+	private float y;
 
 	public Vector2d()
 	{
@@ -14,29 +14,29 @@ public class Vector2d {
 	public Vector2d(int[]pos) {
 		this.set(pos[0], pos[1]);
 	}
-	public Vector2d(double x, double y)
+	public Vector2d(float x, float y)
 	{
 		this.setX(x);
 		this.setY(y);
 	}
 
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void set(double x, double y)
+	public void set(float x, float y)
 	{
 		this.setX(x);
 		this.setY(y);
@@ -45,21 +45,27 @@ public class Vector2d {
 		return new int[]{(int) x,(int) y};
 	}
 
-	public double dot(Vector2d v2)
+	public float dot(Vector2d v2)
 	{
-		double result = 0.0f;
+		float result = 0.0f;
 		result = this.getX() * v2.getX() + this.getY() * v2.getY();
 		return result;
 	}
-
-	public double getLength()
+	public float cross(int[]xy) {
+		return (x*xy[1]) - (y*xy[0]);
+	}
+	
+	public float cross(Vector2d v2) {
+		return (x*v2.y) - (y*v2.x);
+	}
+	public float getLength()
 	{
-		return (double)Math.sqrt(getX()*getX() + getY()*getY());
+		return (float)Math.sqrt(getX()*getX() + getY()*getY());
 	}
 
-	public double getDistance(Vector2d v2)
+	public float getDistance(Vector2d v2)
 	{
-		return (double) Math.sqrt((v2.getX() - getX()) * (v2.getX() - getX()) + (v2.getY() - getY()) * (v2.getY() - getY()));
+		return (float) Math.sqrt((v2.getX() - getX()) * (v2.getX() - getX()) + (v2.getY() - getY()) * (v2.getY() - getY()));
 	}
 
 
@@ -79,7 +85,7 @@ public class Vector2d {
 		return result;
 	}
 
-	public Vector2d multiply(double scaleFactor)
+	public Vector2d multiply(float scaleFactor)
 	{
 		Vector2d result = new Vector2d();
 		result.setX(this.getX() * scaleFactor);
@@ -89,7 +95,7 @@ public class Vector2d {
 
 	public Vector2d normalize()
 	{
-		double len = getLength();
+		float len = getLength();
 		if (len != 0.0f)
 		{
 			this.setX(this.getX() / len);
